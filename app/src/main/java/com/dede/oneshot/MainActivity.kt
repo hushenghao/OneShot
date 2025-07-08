@@ -1,9 +1,6 @@
 package com.dede.oneshot
 
-import android.content.ActivityNotFoundException
 import android.os.Bundle
-import android.text.TextUtils
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -51,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import androidx.compose.ui.util.fastRoundToInt
 import com.dede.oneshot.shot.ALL_ONE_SHOT_LIST
+import com.dede.oneshot.shot.OneShot
 import com.dede.oneshot.ui.theme.OneShotTheme
 
 class MainActivity : ComponentActivity() {
@@ -76,7 +74,7 @@ class MainActivity : ComponentActivity() {
 fun OneShotScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
-    val oneShotList = remember { ALL_ONE_SHOT_LIST }
+    val allOneShotList = remember { ALL_ONE_SHOT_LIST }
     var selectedOneShotIndex by remember { mutableIntStateOf(0) }
 
     Column(
@@ -109,7 +107,7 @@ fun OneShotScreen(modifier: Modifier = Modifier) {
                 text = buildAnnotatedString {
                     append("使用 ")
                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(oneShotList[selectedOneShotIndex].getAppName(context))
+                        append(allOneShotList[selectedOneShotIndex].getAppName(context))
                     }
                     append(" 搜索")
                 },
@@ -126,7 +124,7 @@ fun OneShotScreen(modifier: Modifier = Modifier) {
                 onDismissRequest = {
                     showPopup = false
                 }) {
-                oneShotList.fastForEachIndexed { i, oneShot ->
+                allOneShotList.fastForEachIndexed { i, oneShot ->
                     DropdownMenuItem(
                         text = {
                             Text(text = oneShot.getAppName(context).toString())
@@ -170,17 +168,7 @@ fun OneShotScreen(modifier: Modifier = Modifier) {
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(onSearch = {
-                    if (TextUtils.isEmpty(keyword)) {
-                        Toast.makeText(context, "请输入搜索内容", Toast.LENGTH_SHORT).show()
-                        return@KeyboardActions
-                    }
-                    try {
-                        oneShotList[selectedOneShotIndex].onSearchGo(context, keyword)
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
-                    } catch (e: SecurityException) {
-                        e.printStackTrace()
-                    }
+                    OneShot.searchGo(context, allOneShotList[selectedOneShotIndex], keyword)
                 })
             )
         }

@@ -1,9 +1,12 @@
 package com.dede.oneshot.shot
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.text.TextUtils
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.net.toUri
 import com.dede.oneshot.R
@@ -188,22 +191,13 @@ fun String.encodeKeyword(): String {
     return Uri.encode(this)
 }
 
-fun Intent(
-    action: String = Intent.ACTION_VIEW,
-    category: String = Intent.CATEGORY_DEFAULT,
-    data: String? = null,
-    packageName: String? = null
-): Intent {
-    return Intent(action)
-        .addCategory(category)
-        .apply {
-            data?.let {
-                setData(it.toUri())
-            }
-            packageName?.let {
-                setPackage(it)
-            }
-        }
+fun Context.isAppInstalled(packageName: String): Boolean {
+    return try {
+        packageManager.getApplicationInfo(packageName, 0)
+        true
+    } catch (e: PackageManager.NameNotFoundException) {
+        false
+    }
 }
 
 fun buildOneShot(
@@ -232,12 +226,41 @@ fun buildOneShot(
 
 interface OneShot {
 
+    companion object {
+
+        private val cachedAppName = HashMap<String, CharSequence>()
+
+        fun searchGo(context: Context, oneShot: OneShot, keyword: String) {
+            if (TextUtils.isEmpty(keyword)) {
+                Toast.makeText(context, "请输入搜索内容", Toast.LENGTH_SHORT).show()
+                return
+            }
+            if (oneShot.appPackageName.isNotEmpty() && !context.isAppInstalled(oneShot.appPackageName)) {
+                Toast.makeText(
+                    context, "尚未安装${oneShot.getAppName(context)}", Toast.LENGTH_SHORT
+                ).show()
+                return
+            }
+            try {
+                oneShot.onSearchGo(context, keyword)
+            } catch (e: ActivityNotFoundException) {
+                e.printStackTrace()
+            } catch (e: SecurityException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     val appPackageName: String
 
     @get:StringRes
     val appNameFallbackResId: Int
 
     open fun getAppName(context: Context): CharSequence {
+        val cachedName = cachedAppName[appPackageName]
+        if (cachedName != null) {
+            return cachedName
+        }
         if (appPackageName.isEmpty()) {
             return context.getString(appNameFallbackResId)
         }
@@ -248,7 +271,9 @@ interface OneShot {
         } catch (e: PackageManager.NameNotFoundException) {
             return context.getString(appNameFallbackResId)
         }
-        return packageManager.getApplicationLabel(info)
+        return packageManager.getApplicationLabel(info).also {
+            cachedAppName[appPackageName] = it
+        }
     }
 
     fun buildIntent(context: Context, keyword: String): Intent

@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">OneShot</string>
+
+    <string name="app_name_xhs">小红书</string>
+    <string name="app_name_weibo">微博</string>
+    <string name="app_name_wechat">微信</string>
+
+    <string name="app_name_zhihu">知乎</string>
+    <string name="app_name_douban">豆瓣</string>
+    <string name="app_name_toutiao">今日头条</string>
+    <string name="app_name_netease_news">网易新闻</string>
+
+    <string name="app_name_douyin">抖音</string>
+    <string name="app_name_ks">快手</string>
+    <string name="app_name_bilibili">哔哩哔哩</string>
+
+    <string name="app_name_netease">网易云音乐</string>
+    <string name="app_name_qqmusic">QQ音乐</string>
+
+    <string name="app_name_meituan">美团</string>
+    <string name="app_name_meituanwaimai">美团外卖</string>
+    <string name="app_name_eleme">饿了么</string>
+    <string name="app_name_dianping">大众点评</string>
+    <string name="app_name_alipay">支付宝</string>
+
+    <string name="app_name_taobao">淘宝</string>
+    <string name="app_name_tmall">天猫</string>
+    <string name="app_name_jd">京东</string>
+    <string name="app_name_pdd">拼多多</string>
+    <string name="app_name_vipshop">唯品会</string>
+    <string name="app_name_idlefish">闲鱼</string>
+
+    <string name="app_name_amap">高德地图</string>
+    <string name="app_name_baidumap">百度地图</string>
+
+    <string name="app_name_browser">浏览器</string>
+    <string name="app_name_quark">夸克</string>
+    <string name="app_name_baidu">百度</string>
+    <string name="app_name_bing">必应</string>
+    <string name="app_name_google">谷歌</string>
+
+    <string name="app_name_market">应用商店</string>
+
+</resources>

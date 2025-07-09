@@ -74,16 +74,17 @@ val ALL_ONE_SHOT_LIST = listOf(
     ),
 
     // 音乐
-//    buildOneShot(
-//        appPackageName = "com.netease.cloudmusic",
-//        appNameFallbackResId = R.string.app_name_netease,
-//        dataPattern = "orpheus://search?q={0}",
-//    ),
-//    buildOneShot(
-//        appPackageName = "com.tencent.qqmusic",
-//        appNameFallbackResId = R.string.app_name_qqmusic,
-//        dataPattern = "qqmusic://qq.com/qqmusic_search?p={0}",
-//    ),
+    buildOneShot(
+        appPackageName = "com.netease.cloudmusic",
+        appNameFallbackResId = R.string.app_name_netease,
+        dataPattern = "orpheus://nm/search/result?keyword={0}",
+    ),
+    buildOneShot(
+        appPackageName = "com.tencent.qqmusic",
+        appNameFallbackResId = R.string.app_name_qqmusic,
+        // {"query":"{query}"}
+        dataPattern = "qqmusic://qq.com/ui/search?p=%7B%22query%22%3A%22{0}%22%7D",
+    ),
 
     // 生活服务
     buildOneShot(
@@ -256,7 +257,7 @@ interface OneShot {
     @get:StringRes
     val appNameFallbackResId: Int
 
-    open fun getAppName(context: Context): CharSequence {
+    fun getAppName(context: Context): CharSequence {
         val cachedName = cachedAppName[appPackageName]
         if (cachedName != null) {
             return cachedName

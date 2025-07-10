@@ -52,6 +52,16 @@
                 android:scheme="xhsdiscover" />
         </intent>
 
+        <!-- jike -->
+        <package android:name="com.ruguoapp.jike" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data
+                android:host="page.jk"
+                android:scheme="jike" />
+        </intent>
+
         <!-- weibo -->
         <package android:name="com.sina.weibo" />
         <intent>

@@ -31,6 +31,11 @@ val ALL_ONE_SHOT_LIST = listOf(
         appNameFallbackResId = R.string.app_name_weibo,
         dataPattern = "sinaweibo://searchall?q={0}",
     ),
+    buildOneShot(
+        appPackageName = "com.ruguoapp.jike",
+        appNameFallbackResId = R.string.app_name_jike,
+        dataPattern = "jike://page.jk/search?type=integrated&keywords={0}",
+    ),
 
     // 资讯
     buildOneShot(

@@ -1,13 +1,17 @@
 package com.dede.oneshot.shot
 
+import android.app.SearchManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import com.dede.oneshot.R
 import java.text.MessageFormat
@@ -169,28 +173,40 @@ val ALL_ONE_SHOT_LIST = listOf(
     buildOneShot(
         appPackageName = "",
         appNameFallbackResId = R.string.app_name_bing,
+        appIconFallbackResId = R.drawable.logo_bing,
         category = Intent.CATEGORY_BROWSABLE,
         dataPattern = "https://www.bing.com/search?q={0}",
     ),
     buildOneShot(
         appPackageName = "",
         appNameFallbackResId = R.string.app_name_baidu,
+        appIconFallbackResId = R.drawable.logo_baidu,
         category = Intent.CATEGORY_BROWSABLE,
         dataPattern = "https://www.baidu.com/s?wd={0}",
     ),
     buildOneShot(
         appPackageName = "",
         appNameFallbackResId = R.string.app_name_google,
+        appIconFallbackResId = R.drawable.logo_google,
         category = Intent.CATEGORY_BROWSABLE,
         dataPattern = "https://www.google.com/search?q={0}",
     ),
     buildOneShot(
+        appPackageName = "com.android.browser",
+        appNameFallbackResId = R.string.app_name_browser,
+        appIconFallbackResId = R.drawable.rounded_language_24
+    ) { _, keyword ->
+        Intent(Intent.ACTION_WEB_SEARCH)
+            .addCategory(Intent.CATEGORY_BROWSABLE)
+            .putExtra(SearchManager.QUERY, keyword)
+    },
+    buildOneShot(
         appPackageName = "",
         appNameFallbackResId = R.string.app_name_market,
+        appIconFallbackResId = R.drawable.rounded_android_24,
         category = Intent.CATEGORY_BROWSABLE,
         dataPattern = "market://search?q={0}",
     ),
-    BrowserOneShot(),
 )
 
 fun String.encodeKeyword(): String {
@@ -209,32 +225,60 @@ fun Context.isAppInstalled(packageName: String): Boolean {
 fun buildOneShot(
     appPackageName: String,
     @StringRes appNameFallbackResId: Int,
+    @DrawableRes appIconFallbackResId: Int = -1,
+    buildIntent: (context: Context, keyword: String) -> Intent,
+): OneShot {
+    return object : OneShot {
+        override val appPackageName: String = appPackageName
+        override val appNameFallbackResId: Int = appNameFallbackResId
+        override val appIconFallbackResId: Int = appIconFallbackResId
+
+        override fun buildIntent(context: Context, keyword: String): Intent {
+            return buildIntent(context, keyword)
+        }
+    }
+}
+
+fun buildOneShot(
+    appPackageName: String,
+    @StringRes appNameFallbackResId: Int,
+    @DrawableRes appIconFallbackResId: Int = R.drawable.rounded_search_off_24,
     action: String = Intent.ACTION_VIEW,
     category: String = Intent.CATEGORY_DEFAULT,
     dataPattern: String? = null,// scheme://host/path?search={0}
     keywordEncode: Boolean = true,
     matchPackage: Boolean = false,
 ): OneShot {
-    return object : OneShot {
-        override val appPackageName: String = appPackageName
-        override val appNameFallbackResId: Int = appNameFallbackResId
-
-        override fun buildIntent(context: Context, keyword: String): Intent {
-            val query = if (keywordEncode) keyword.encodeKeyword() else keyword
-            val data = MessageFormat.format(dataPattern, query)
-            return Intent(action)
-                .addCategory(category)
-                .setData(data.toUri())
-                .setPackage(if (matchPackage) appPackageName else null)
-        }
+    return buildOneShot(
+        appPackageName = appPackageName,
+        appNameFallbackResId = appNameFallbackResId,
+        appIconFallbackResId = appIconFallbackResId
+    ) { _, keyword ->
+        val query = if (keywordEncode) keyword.encodeKeyword() else keyword
+        val data = MessageFormat.format(dataPattern, query)
+        Intent(action)
+            .addCategory(category)
+            .setData(data.toUri())
+            .setPackage(if (matchPackage) appPackageName else null)
     }
 }
 
 interface OneShot {
 
+    class Preload(private val context: Context) : Runnable {
+        override fun run() {
+            for (shot in ALL_ONE_SHOT_LIST) {
+                shot.getAppIcon(context)
+                shot.getAppName(context)
+            }
+        }
+    }
+
     companion object {
 
         private val cachedAppName = HashMap<String, CharSequence>()
+
+        private val cachedAppIcon = HashMap<String, Drawable>()
 
         fun searchGo(context: Context, oneShot: OneShot, keyword: String) {
             if (TextUtils.isEmpty(keyword)) {
@@ -261,6 +305,32 @@ interface OneShot {
 
     @get:StringRes
     val appNameFallbackResId: Int
+
+    @get:DrawableRes
+    val appIconFallbackResId: Int
+
+    fun getAppIcon(context: Context): Drawable? {
+        val cachedIcon = cachedAppIcon[appPackageName]
+        if (cachedIcon != null) {
+            return cachedIcon
+        }
+
+        if (appPackageName.isEmpty() && appIconFallbackResId != -1) {
+            return ActivityCompat.getDrawable(context, appIconFallbackResId)
+        }
+        val packageManager = context.packageManager
+        val info = try {
+            packageManager.getApplicationInfo(appPackageName, 0)
+        } catch (e: PackageManager.NameNotFoundException) {
+            if (appIconFallbackResId != -1) {
+                return ActivityCompat.getDrawable(context, appIconFallbackResId)
+            }
+            return null
+        }
+        return packageManager.getApplicationIcon(info).also {
+            cachedAppIcon[appPackageName] = it
+        }
+    }
 
     fun getAppName(context: Context): CharSequence {
         val cachedName = cachedAppName[appPackageName]

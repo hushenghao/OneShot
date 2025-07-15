@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -53,6 +55,7 @@ import androidx.compose.ui.util.fastRoundToInt
 import com.dede.oneshot.shot.ALL_ONE_SHOT_LIST
 import com.dede.oneshot.shot.OneShot
 import com.dede.oneshot.ui.theme.OneShotTheme
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -130,7 +133,26 @@ fun OneShotScreen(modifier: Modifier = Modifier) {
                 allOneShotList.fastForEachIndexed { i, oneShot ->
                     DropdownMenuItem(
                         text = {
-                            Text(text = oneShot.getAppName(context).toString())
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                val iconDraw = oneShot.getAppIcon(context)
+                                if (iconDraw == null) {
+                                    Image(
+                                        imageVector = Icons.Rounded.Search,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                } else {
+                                    Image(
+                                        painter = rememberDrawablePainter(iconDraw),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                }
+                                Text(text = oneShot.getAppName(context).toString())
+                            }
                         },
                         onClick = {
                             selectedOneShotIndex = i

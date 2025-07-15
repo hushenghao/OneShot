@@ -270,7 +270,7 @@
             tools:node="merge">
             <meta-data
                 android:name="com.dede.oneshot.app.OneShotInitializer"
-                android:resource="@string/androidx_startup" />
+                android:value="@string/androidx_startup" />
         </provider>
     </application>
 

@@ -113,7 +113,7 @@ fun OneShotScreen(modifier: Modifier = Modifier) {
                 text = buildAnnotatedString {
                     append("用 ")
                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(allOneShotList[selectedOneShotIndex].getAppName(context))
+                        append(allOneShotList[selectedOneShotIndex].getAppName())
                     }
                     append(" 搜索")
                 },
@@ -137,7 +137,7 @@ fun OneShotScreen(modifier: Modifier = Modifier) {
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                val iconDraw = oneShot.getAppIcon(context)
+                                val iconDraw = oneShot.getAppIcon()
                                 if (iconDraw == null) {
                                     Image(
                                         imageVector = Icons.Rounded.Search,
@@ -151,7 +151,7 @@ fun OneShotScreen(modifier: Modifier = Modifier) {
                                         modifier = Modifier.size(24.dp)
                                     )
                                 }
-                                Text(text = oneShot.getAppName(context).toString())
+                                Text(text = oneShot.getAppName().toString())
                             }
                         },
                         onClick = {

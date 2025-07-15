@@ -4,14 +4,12 @@ import android.app.SearchManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import com.dede.oneshot.R
 import java.text.MessageFormat
@@ -213,15 +211,6 @@ fun String.encodeKeyword(): String {
     return Uri.encode(this)
 }
 
-fun Context.isAppInstalled(packageName: String): Boolean {
-    return try {
-        packageManager.getApplicationInfo(packageName, 0)
-        true
-    } catch (e: PackageManager.NameNotFoundException) {
-        false
-    }
-}
-
 fun buildOneShot(
     appPackageName: String,
     @StringRes appNameFallbackResId: Int,
@@ -265,29 +254,18 @@ fun buildOneShot(
 
 interface OneShot {
 
-    class Preload(private val context: Context) : Runnable {
-        override fun run() {
-            for (shot in ALL_ONE_SHOT_LIST) {
-                shot.getAppIcon(context)
-                shot.getAppName(context)
-            }
-        }
-    }
-
     companion object {
-
-        private val cachedAppName = HashMap<String, CharSequence>()
-
-        private val cachedAppIcon = HashMap<String, Drawable>()
 
         fun searchGo(context: Context, oneShot: OneShot, keyword: String) {
             if (TextUtils.isEmpty(keyword)) {
                 Toast.makeText(context, "请输入搜索内容", Toast.LENGTH_SHORT).show()
                 return
             }
-            if (oneShot.appPackageName.isNotEmpty() && !context.isAppInstalled(oneShot.appPackageName)) {
+            if (oneShot.appPackageName.isNotEmpty() &&
+                !OneShotAppsManager.get().isAppInstalled(oneShot.appPackageName)
+            ) {
                 Toast.makeText(
-                    context, "尚未安装${oneShot.getAppName(context)}", Toast.LENGTH_SHORT
+                    context, "尚未安装${oneShot.getAppName()}", Toast.LENGTH_SHORT
                 ).show()
                 return
             }
@@ -309,47 +287,12 @@ interface OneShot {
     @get:DrawableRes
     val appIconFallbackResId: Int
 
-    fun getAppIcon(context: Context): Drawable? {
-        val cachedIcon = cachedAppIcon[appPackageName]
-        if (cachedIcon != null) {
-            return cachedIcon
-        }
-
-        if (appPackageName.isEmpty() && appIconFallbackResId != -1) {
-            return ActivityCompat.getDrawable(context, appIconFallbackResId)
-        }
-        val packageManager = context.packageManager
-        val info = try {
-            packageManager.getApplicationInfo(appPackageName, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
-            if (appIconFallbackResId != -1) {
-                return ActivityCompat.getDrawable(context, appIconFallbackResId)
-            }
-            return null
-        }
-        return packageManager.getApplicationIcon(info).also {
-            cachedAppIcon[appPackageName] = it
-        }
+    fun getAppIcon(): Drawable? {
+        return OneShotAppsManager.get().getAppIcon(appPackageName, appIconFallbackResId)
     }
 
-    fun getAppName(context: Context): CharSequence {
-        val cachedName = cachedAppName[appPackageName]
-        if (cachedName != null) {
-            return cachedName
-        }
-        if (appPackageName.isEmpty()) {
-            return context.getString(appNameFallbackResId)
-        }
-
-        val packageManager = context.packageManager
-        val info = try {
-            packageManager.getApplicationInfo(appPackageName, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
-            return context.getString(appNameFallbackResId)
-        }
-        return packageManager.getApplicationLabel(info).also {
-            cachedAppName[appPackageName] = it
-        }
+    fun getAppName(): CharSequence {
+        return OneShotAppsManager.get().getAppName(appPackageName, appNameFallbackResId)
     }
 
     fun buildIntent(context: Context, keyword: String): Intent

@@ -2,11 +2,13 @@ package com.dede.oneshot.shot
 
 import android.app.SearchManager
 import android.content.ActivityNotFoundException
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -23,11 +25,6 @@ val ALL_ONE_SHOT_LIST = listOf(
         category = Intent.CATEGORY_BROWSABLE,
         dataPattern = "xhsdiscover://search/result?keyword={0}",
     ),
-//    buildOneShot(
-//        appPackageName = "com.tencent.mm",
-//        appNameFallbackResId = R.string.app_name_wechat,
-//        dataPattern = "weixin://dl/business/search?query={0}",
-//    ),
     buildOneShot(
         appPackageName = "com.sina.weibo",
         appNameFallbackResId = R.string.app_name_weibo,
@@ -192,12 +189,13 @@ val ALL_ONE_SHOT_LIST = listOf(
     buildOneShot(
         appPackageName = "com.android.browser",
         appNameFallbackResId = R.string.app_name_browser,
-        appIconFallbackResId = R.drawable.rounded_language_24
-    ) { _, keyword ->
-        Intent(Intent.ACTION_WEB_SEARCH)
-            .addCategory(Intent.CATEGORY_BROWSABLE)
-            .putExtra(SearchManager.QUERY, keyword)
-    },
+        appIconFallbackResId = R.drawable.rounded_language_24,
+        action = Intent.ACTION_WEB_SEARCH,
+        category = Intent.CATEGORY_BROWSABLE,
+        buildIntent = { keyword ->
+            putExtra(SearchManager.QUERY, keyword)
+        }
+    ),
     buildOneShot(
         appPackageName = "",
         appNameFallbackResId = R.string.app_name_market,
@@ -214,8 +212,13 @@ fun String.encodeKeyword(): String {
 fun buildOneShot(
     appPackageName: String,
     @StringRes appNameFallbackResId: Int,
-    @DrawableRes appIconFallbackResId: Int = -1,
-    buildIntent: (context: Context, keyword: String) -> Intent,
+    @DrawableRes appIconFallbackResId: Int = R.drawable.rounded_search_off_24,
+    action: String = Intent.ACTION_VIEW,
+    category: String = Intent.CATEGORY_DEFAULT,
+    dataPattern: String? = null,// scheme://host/path?search={0}
+    keywordEncode: Boolean = true,
+    matchPackage: Boolean = false,
+    buildIntent: Intent.(keyword: String) -> Unit = {}
 ): OneShot {
     return object : OneShot {
         override val appPackageName: String = appPackageName
@@ -223,32 +226,20 @@ fun buildOneShot(
         override val appIconFallbackResId: Int = appIconFallbackResId
 
         override fun buildIntent(context: Context, keyword: String): Intent {
-            return buildIntent(context, keyword)
+            return Intent(action)
+                .addCategory(category)
+                .apply {
+                    if (matchPackage) {
+                        setPackage(appPackageName)
+                    }
+                    if (dataPattern != null) {
+                        val query = if (keywordEncode) keyword.encodeKeyword() else keyword
+                        val data = MessageFormat.format(dataPattern, query)
+                        setData(data.toUri())
+                    }
+                    buildIntent(keyword)
+                }
         }
-    }
-}
-
-fun buildOneShot(
-    appPackageName: String,
-    @StringRes appNameFallbackResId: Int,
-    @DrawableRes appIconFallbackResId: Int = R.drawable.rounded_search_off_24,
-    action: String = Intent.ACTION_VIEW,
-    category: String = Intent.CATEGORY_DEFAULT,
-    dataPattern: String? = null,// scheme://host/path?search={0}
-    keywordEncode: Boolean = true,
-    matchPackage: Boolean = false,
-): OneShot {
-    return buildOneShot(
-        appPackageName = appPackageName,
-        appNameFallbackResId = appNameFallbackResId,
-        appIconFallbackResId = appIconFallbackResId
-    ) { _, keyword ->
-        val query = if (keywordEncode) keyword.encodeKeyword() else keyword
-        val data = MessageFormat.format(dataPattern, query)
-        Intent(action)
-            .addCategory(category)
-            .setData(data.toUri())
-            .setPackage(if (matchPackage) appPackageName else null)
     }
 }
 

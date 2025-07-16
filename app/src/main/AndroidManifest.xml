@@ -34,14 +34,6 @@
             <data android:scheme="qqmusic" />
         </intent>
 
-        <!-- wechat -->
-        <package android:name="com.tencent.mm" />
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <data android:scheme="weixin" />
-        </intent>
-
         <!-- xhs -->
         <package android:name="com.xingin.xhs" />
         <intent>

@@ -56,6 +56,11 @@ val ALL_ONE_SHOT_LIST = listOf(
         appNameFallbackResId = R.string.app_name_netease_news,
         dataPattern = "newsapp://nc/search?word={0}",
     ),
+    buildOneShot(
+        appPackageName = "com.tencent.news",
+        appNameFallbackResId = R.string.app_name_tencent_news,
+        dataPattern = "qqnews://article_9527?chlid=news_search&search_keyword={0}",
+    ),
 
     // 视频
     buildOneShot(

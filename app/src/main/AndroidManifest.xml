@@ -105,6 +105,15 @@
                 android:scheme="newsapp" />
         </intent>
 
+        <!-- qqnews -->
+        <package android:name="com.tencent.news" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:scheme="qqnews"
+                android:host="article_9527"/>
+        </intent>
+
         <!-- Video -->
 
         <!-- bilibili -->

@@ -300,12 +300,12 @@
         <!-- qqmap -->
         <package android:name="com.tencent.map" />
         <intent>
-            <action android:name="android.intent.action.VIEW"/>
-            <category android:name="android.intent.category.DEFAULT"/>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
             <data
-                android:scheme="qqmap"
                 android:host="map"
-                android:pathPrefix="/search"/>
+                android:pathPrefix="/search"
+                android:scheme="qqmap" />
         </intent>
 
         <!-- Tools -->

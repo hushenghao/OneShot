@@ -81,17 +81,17 @@ val ALL_ONE_SHOT_LIST = listOf(
     ),
     buildOneShot(
         appPackageName = "com.qiyi.video",
-        appNameFallbackResId = R.string.app_name_iqiyi  ,
+        appNameFallbackResId = R.string.app_name_iqiyi,
         dataPattern = "iqiyi://mobile/search?keyword={0}",
     ),
     buildOneShot(
         appPackageName = "com.youku.phone",
-        appNameFallbackResId = R.string.app_name_youku  ,
+        appNameFallbackResId = R.string.app_name_youku,
         dataPattern = "youku://soku/searchresult?keyword={0}",
     ),
     buildOneShot(
         appPackageName = "com.tencent.qqlive",
-        appNameFallbackResId = R.string.app_name_qqlive  ,
+        appNameFallbackResId = R.string.app_name_qqlive,
         dataPattern = "txvideo://v.qq.com/SearchPagerActivity?searchKey={0}&autoSearch=1",
     ),
 

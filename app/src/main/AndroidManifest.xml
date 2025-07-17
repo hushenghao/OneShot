@@ -18,6 +18,8 @@
             <action android:name="android.intent.action.WEB_SEARCH" />
         </intent>
 
+        <!-- Music -->
+
         <!-- netease -->
         <package android:name="com.netease.cloudmusic" />
         <intent>
@@ -33,6 +35,8 @@
             <category android:name="android.intent.category.DEFAULT" />
             <data android:scheme="qqmusic" />
         </intent>
+
+        <!-- Social -->
 
         <!-- xhs -->
         <package android:name="com.xingin.xhs" />
@@ -55,6 +59,14 @@
                 android:scheme="jike" />
         </intent>
 
+        <!-- zhihu -->
+        <package android:name="com.zhihu.android" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="zhihu" />
+        </intent>
+
         <!-- weibo -->
         <package android:name="com.sina.weibo" />
         <intent>
@@ -62,6 +74,18 @@
             <category android:name="android.intent.category.DEFAULT" />
             <data android:scheme="sinaweibo" />
         </intent>
+
+        <!-- douban -->
+        <package android:name="com.douban.frodo" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data
+                android:host="douban.com"
+                android:scheme="douban" />
+        </intent>
+
+        <!-- News -->
 
         <!-- toutiao -->
         <package android:name="com.ss.android.article.news" />
@@ -81,15 +105,7 @@
                 android:scheme="newsapp" />
         </intent>
 
-        <!-- douban -->
-        <package android:name="com.douban.frodo" />
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <data
-                android:host="douban.com"
-                android:scheme="douban" />
-        </intent>
+        <!-- Video -->
 
         <!-- bilibili -->
         <package android:name="tv.danmaku.bili" />
@@ -115,13 +131,40 @@
             <data android:scheme="kwai" />
         </intent>
 
-        <!-- zhihu -->
-        <package android:name="com.zhihu.android" />
+        <!-- youku -->
+        <package android:name="com.youku.phone" />
         <intent>
             <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="zhihu" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data
+                android:host="soku"
+                android:path="/searchresult"
+                android:scheme="youku" />
         </intent>
+
+        <!-- iqiyi -->
+        <package android:name="com.qiyi.video" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data
+                android:host="mobile"
+                android:path="/search"
+                android:scheme="iqiyi" />
+        </intent>
+
+        <!-- qqlive -->
+        <package android:name="com.tencent.qqlive" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data
+                android:host="v.qq.com"
+                android:pathPrefix="/SearchPagerActivity"
+                android:scheme="txvideo" />
+        </intent>
+
+        <!-- Life services -->
 
         <!-- imeituan -->
         <package android:name="com.sankuai.meituan" />
@@ -162,6 +205,8 @@
             <category android:name="android.intent.category.DEFAULT" />
             <data android:scheme="dianping" />
         </intent>
+
+        <!-- Shopping -->
 
         <!-- taobao -->
         <package android:name="com.taobao.taobao" />
@@ -217,6 +262,8 @@
             <data android:scheme="fleamarket" />
         </intent>
 
+        <!-- Map -->
+
         <!-- baidumap -->
         <package android:name="com.baidu.BaiduMap" />
         <intent>
@@ -232,6 +279,8 @@
             <category android:name="android.intent.category.DEFAULT" />
             <data android:scheme="amapuri" />
         </intent>
+
+        <!-- Tools -->
 
     </queries>
 

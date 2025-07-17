@@ -2,13 +2,11 @@ package com.dede.oneshot.shot
 
 import android.app.SearchManager
 import android.content.ActivityNotFoundException
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.TextUtils
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -35,8 +33,6 @@ val ALL_ONE_SHOT_LIST = listOf(
         appNameFallbackResId = R.string.app_name_jike,
         dataPattern = "jike://page.jk/search?type=integrated&keywords={0}",
     ),
-
-    // 资讯
     buildOneShot(
         appPackageName = "com.zhihu.android",
         appNameFallbackResId = R.string.app_name_zhihu,
@@ -48,6 +44,8 @@ val ALL_ONE_SHOT_LIST = listOf(
         appNameFallbackResId = R.string.app_name_douban,
         dataPattern = "douban://douban.com/search/result?q={0}",
     ),
+
+    // 资讯
     buildOneShot(
         appPackageName = "com.ss.android.article.news",
         appNameFallbackResId = R.string.app_name_toutiao,
@@ -75,6 +73,21 @@ val ALL_ONE_SHOT_LIST = listOf(
         appPackageName = "com.ss.android.ugc.aweme",
         appNameFallbackResId = R.string.app_name_douyin,
         dataPattern = "snssdk1128://search?keyword={0}",
+    ),
+    buildOneShot(
+        appPackageName = "com.qiyi.video",
+        appNameFallbackResId = R.string.app_name_iqiyi  ,
+        dataPattern = "iqiyi://mobile/search?keyword={0}",
+    ),
+    buildOneShot(
+        appPackageName = "com.youku.phone",
+        appNameFallbackResId = R.string.app_name_youku  ,
+        dataPattern = "youku://soku/searchresult?keyword={0}",
+    ),
+    buildOneShot(
+        appPackageName = "com.tencent.qqlive",
+        appNameFallbackResId = R.string.app_name_qqlive  ,
+        dataPattern = "txvideo://v.qq.com/SearchPagerActivity?searchKey={0}&autoSearch=1",
     ),
 
     // 音乐

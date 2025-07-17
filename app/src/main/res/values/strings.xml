@@ -4,15 +4,18 @@
     <string name="app_name_xhs">小红书</string>
     <string name="app_name_weibo">微博</string>
     <string name="app_name_jike">即刻</string>
-
     <string name="app_name_zhihu">知乎</string>
     <string name="app_name_douban">豆瓣</string>
+
     <string name="app_name_toutiao">今日头条</string>
     <string name="app_name_netease_news">网易新闻</string>
 
     <string name="app_name_douyin">抖音</string>
     <string name="app_name_ks">快手</string>
     <string name="app_name_bilibili">哔哩哔哩</string>
+    <string name="app_name_youku">优酷视频</string>
+    <string name="app_name_iqiyi">爱奇艺</string>
+    <string name="app_name_qqlive">腾讯视频</string>
 
     <string name="app_name_netease">网易云音乐</string>
     <string name="app_name_qqmusic">QQ音乐</string>
@@ -34,7 +37,6 @@
     <string name="app_name_baidumap">百度地图</string>
 
     <string name="app_name_browser">浏览器</string>
-    <string name="app_name_quark">夸克</string>
     <string name="app_name_baidu">百度</string>
     <string name="app_name_bing">必应</string>
     <string name="app_name_google">谷歌</string>

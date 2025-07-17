@@ -146,6 +146,11 @@ val ALL_ONE_SHOT_LIST = listOf(
         appNameFallbackResId = R.string.app_name_baidumap,
         dataPattern = "baidumap://map/place/search?query={0}",
     ),
+    buildOneShot(
+        appPackageName = "com.tencent.map",
+        appNameFallbackResId = R.string.app_name_qqmap,
+        dataPattern = "qqmap://map/search?keyword={0}",
+    ),
 
     // 购物
     buildOneShot(

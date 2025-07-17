@@ -36,6 +36,7 @@
 
     <string name="app_name_amap">高德地图</string>
     <string name="app_name_baidumap">百度地图</string>
+    <string name="app_name_qqmap">腾讯地图</string>
 
     <string name="app_name_browser">浏览器</string>
     <string name="app_name_baidu">百度</string>

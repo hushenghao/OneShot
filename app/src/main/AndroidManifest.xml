@@ -12,10 +12,17 @@
             <data android:scheme="market" />
         </intent>
 
+        <!-- Search -->
+
         <!-- browser -->
         <package android:name="com.android.browser" />
         <intent>
             <action android:name="android.intent.action.WEB_SEARCH" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
         </intent>
 
         <!-- Music -->
@@ -110,8 +117,9 @@
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
-            <data android:scheme="qqnews"
-                android:host="article_9527"/>
+            <data
+                android:host="article_9527"
+                android:scheme="qqnews" />
         </intent>
 
         <!-- Video -->
@@ -287,6 +295,17 @@
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <data android:scheme="amapuri" />
+        </intent>
+
+        <!-- qqmap -->
+        <package android:name="com.tencent.map" />
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+            <data
+                android:scheme="qqmap"
+                android:host="map"
+                android:pathPrefix="/search"/>
         </intent>
 
         <!-- Tools -->

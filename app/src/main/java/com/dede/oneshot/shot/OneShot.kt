@@ -15,14 +15,40 @@ import com.dede.oneshot.R
 import java.text.MessageFormat
 
 
+private val xhsOneShot = buildOneShot(
+    appPackageName = "com.xingin.xhs",
+    appNameFallbackResId = R.string.app_name_xhs,
+    category = Intent.CATEGORY_BROWSABLE,
+    dataPattern = "xhsdiscover://search/result?keyword={0}",
+)
+private val dyOneShot = buildOneShot(
+    appPackageName = "com.ss.android.ugc.aweme",
+    appNameFallbackResId = R.string.app_name_douyin,
+    dataPattern = "snssdk1128://search?keyword={0}",
+)
+private val taobaoOneShot = buildOneShot(
+    appPackageName = "com.taobao.taobao",
+    appNameFallbackResId = R.string.app_name_taobao,
+    category = Intent.CATEGORY_BROWSABLE,
+    dataPattern = "taobao://m.taobao.com/tbopen/index.html?h5Url=http://s.taobao.com/search?q={0}",
+)
+private val browserOneShot = buildOneShot(
+    appPackageName = "com.android.browser",
+    appNameFallbackResId = R.string.app_name_browser,
+    appIconFallbackResId = R.drawable.rounded_language_24,
+    action = Intent.ACTION_WEB_SEARCH,
+    category = Intent.CATEGORY_BROWSABLE,
+    buildIntent = { keyword ->
+        putExtra(SearchManager.QUERY, keyword)
+    }
+)
+
+val SUGGESTION_ONE_SHOT_LIST = listOf(
+    xhsOneShot, dyOneShot, taobaoOneShot, browserOneShot
+)
 val ALL_ONE_SHOT_LIST = listOf(
     // 社交
-    buildOneShot(
-        appPackageName = "com.xingin.xhs",
-        appNameFallbackResId = R.string.app_name_xhs,
-        category = Intent.CATEGORY_BROWSABLE,
-        dataPattern = "xhsdiscover://search/result?keyword={0}",
-    ),
+    xhsOneShot,
     buildOneShot(
         appPackageName = "com.sina.weibo",
         appNameFallbackResId = R.string.app_name_weibo,
@@ -74,11 +100,7 @@ val ALL_ONE_SHOT_LIST = listOf(
         category = Intent.CATEGORY_BROWSABLE,
         dataPattern = "kwai://search?keyword={0}",
     ),
-    buildOneShot(
-        appPackageName = "com.ss.android.ugc.aweme",
-        appNameFallbackResId = R.string.app_name_douyin,
-        dataPattern = "snssdk1128://search?keyword={0}",
-    ),
+    dyOneShot,
     buildOneShot(
         appPackageName = "com.qiyi.video",
         appNameFallbackResId = R.string.app_name_iqiyi,
@@ -153,12 +175,7 @@ val ALL_ONE_SHOT_LIST = listOf(
     ),
 
     // 购物
-    buildOneShot(
-        appPackageName = "com.taobao.taobao",
-        appNameFallbackResId = R.string.app_name_taobao,
-        category = Intent.CATEGORY_BROWSABLE,
-        dataPattern = "taobao://m.taobao.com/tbopen/index.html?h5Url=http://s.taobao.com/search?q={0}",
-    ),
+    taobaoOneShot,
     buildOneShot(
         appPackageName = "com.tmall.wireless",
         appNameFallbackResId = R.string.app_name_tmall,
@@ -209,16 +226,7 @@ val ALL_ONE_SHOT_LIST = listOf(
         category = Intent.CATEGORY_BROWSABLE,
         dataPattern = "https://www.google.com/search?q={0}",
     ),
-    buildOneShot(
-        appPackageName = "com.android.browser",
-        appNameFallbackResId = R.string.app_name_browser,
-        appIconFallbackResId = R.drawable.rounded_language_24,
-        action = Intent.ACTION_WEB_SEARCH,
-        category = Intent.CATEGORY_BROWSABLE,
-        buildIntent = { keyword ->
-            putExtra(SearchManager.QUERY, keyword)
-        }
-    ),
+    browserOneShot,
     buildOneShot(
         appPackageName = "",
         appNameFallbackResId = R.string.app_name_market,
